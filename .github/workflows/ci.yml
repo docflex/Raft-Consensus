@@ -33,13 +33,13 @@ jobs:
         run: mvn compile -q
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GH_PKG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PKG_TOKEN: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
 
       - name: Run tests
         run: mvn test -B
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GH_PKG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PKG_TOKEN: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
 
       - name: Upload test results
         if: always()
@@ -72,7 +72,7 @@ jobs:
         run: mvn package -DskipTests -q
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GH_PKG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PKG_TOKEN: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
@@ -104,7 +104,7 @@ jobs:
         run: mvn package -DskipTests -q
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GH_PKG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PKG_TOKEN: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
 
       - name: Build Docker image
         run: docker build -t raft-consensus:${{ github.sha }} .
