@@ -26,20 +26,20 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
           server-id: github
-          server-username: ${{ github.actor }}
-          server-password: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
+          server-username: GITHUB_ACTOR
+          server-password: PACKAGE_REGISTRY_TOKEN
 
       - name: Compile
         run: mvn compile -q
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GH_PKG_TOKEN: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
+          PACKAGE_REGISTRY_TOKEN: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
 
       - name: Run tests
         run: mvn test -B
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GH_PKG_TOKEN: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
+          PACKAGE_REGISTRY_TOKEN: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
 
       - name: Upload test results
         if: always()
@@ -65,14 +65,14 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
           server-id: github
-          server-username: ${{ github.actor }}
-          server-password: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
+          server-username: GITHUB_ACTOR
+          server-password: PACKAGE_REGISTRY_TOKEN
 
       - name: Build JAR (skip tests)
         run: mvn package -DskipTests -q
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GH_PKG_TOKEN: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
+          PACKAGE_REGISTRY_TOKEN: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
@@ -97,14 +97,14 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
           server-id: github
-          server-username: ${{ github.actor }}
-          server-password: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
+          server-username: GITHUB_ACTOR
+          server-password: PACKAGE_REGISTRY_TOKEN
 
       - name: Build JAR for Docker
         run: mvn package -DskipTests -q
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GH_PKG_TOKEN: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
+          PACKAGE_REGISTRY_TOKEN: ${{ secrets.PACKAGE_REGISTRY_TOKEN }}
 
       - name: Build Docker image
         run: docker build -t raft-consensus:${{ github.sha }} .
