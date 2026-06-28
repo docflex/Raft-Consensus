@@ -25,21 +25,21 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
-          server-id: github-riptidekv
+          server-id: github
           server-username: GITHUB_ACTOR
-          server-password: GITHUB_TOKEN
+          server-password: GH_PKG_TOKEN
 
       - name: Compile
         run: mvn compile -q
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PKG_TOKEN: ${{ secrets.GH_PKG_TOKEN }}
 
       - name: Run tests
         run: mvn test -B
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PKG_TOKEN: ${{ secrets.GH_PKG_TOKEN }}
 
       - name: Upload test results
         if: always()
@@ -64,15 +64,15 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
-          server-id: github-riptidekv
+          server-id: github
           server-username: GITHUB_ACTOR
-          server-password: GITHUB_TOKEN
+          server-password: GH_PKG_TOKEN
 
       - name: Build JAR (skip tests)
         run: mvn package -DskipTests -q
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PKG_TOKEN: ${{ secrets.GH_PKG_TOKEN }}
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
@@ -96,18 +96,19 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
-          server-id: github-riptidekv
+          server-id: github
           server-username: GITHUB_ACTOR
-          server-password: GITHUB_TOKEN
+          server-password: GH_PKG_TOKEN
 
       - name: Build JAR for Docker
         run: mvn package -DskipTests -q
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_PKG_TOKEN: ${{ secrets.GH_PKG_TOKEN }}
 
       - name: Build Docker image
         run: docker build -t raft-consensus:${{ github.sha }} .
 
       - name: Verify Docker image
         run: docker image inspect raft-consensus:${{ github.sha }}
+
