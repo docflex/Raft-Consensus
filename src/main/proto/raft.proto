@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+option java_package = "learning.grpc.generated";
+option java_multiple_files = true;
+
+// ========================== Messages ==========================
+
+message LogEntryProto {
+  int64 index = 1;
+  int64 term = 2;
+  string command = 3;
+}
+
+// --- PreVote ---
+message PreVoteRequestProto {
+  int64 term = 1;
+  int64 candidate_id = 2;
+  int64 last_log_index = 3;
+  int64 last_log_term = 4;
+}
+
+message PreVoteResponseProto {
+  int64 term = 1;
+  bool vote_granted = 2;
+}
+
+// --- RequestVote ---
+message RequestVoteRequestProto {
+  int64 term = 1;
+  int64 candidate_id = 2;
+  int64 last_log_index = 3;
+  int64 last_log_term = 4;
+}
+
+message RequestVoteResponseProto {
+  int64 term = 1;
+  bool vote_granted = 2;
+}
+
+// --- AppendEntries ---
+message AppendEntriesRequestProto {
+  int64 term = 1;
+  int64 leader_id = 2;
+  int64 prev_log_index = 3;
+  int64 prev_log_term = 4;
+  repeated LogEntryProto entries = 5;
+  int64 leader_commit = 6;
+}
+
+message AppendEntriesResponseProto {
+  int64 term = 1;
+  bool success = 2;
+}
+
+// --- InstallSnapshot ---
+message InstallSnapshotRequestProto {
+  int64 term = 1;
+  int64 leader_id = 2;
+  int64 last_included_index = 3;
+  int64 last_included_term = 4;
+  bytes data = 5;
+  bool done = 6;
+}
+
+message InstallSnapshotResponseProto {
+  int64 term = 1;
+}
+
+// --- Client ---
+message ClientRequestProto {
+  int64 client_id = 1;
+  int64 serial_number = 2;
+  string command = 3;
+}
+
+message ClientResponseProto {
+  bool success = 1;
+  string result = 2;
+  int64 leader_hint_id = 3; // 0 = no hint
+}
+
+// --- Discovery ---
+message IdentifyRequest {}
+
+message IdentifyResponse {
+  int64 node_id = 1;
+  int32 grpc_port = 2;
+}
+
+// ========================== Service ==========================
+
+service RaftService {
+  rpc PreVote (PreVoteRequestProto) returns (PreVoteResponseProto);
+  rpc RequestVote (RequestVoteRequestProto) returns (RequestVoteResponseProto);
+  rpc AppendEntries (AppendEntriesRequestProto) returns (AppendEntriesResponseProto);
+  rpc InstallSnapshot (InstallSnapshotRequestProto) returns (InstallSnapshotResponseProto);
+  rpc ClientCommand (ClientRequestProto) returns (ClientResponseProto);
+  rpc ReadOnlyQuery (ClientRequestProto) returns (ClientResponseProto);
+  rpc Identify (IdentifyRequest) returns (IdentifyResponse);
+}

@@ -1,0 +1,26 @@
+services:
+  raft:
+    build: .
+    restart: "no"
+    deploy:
+      replicas: 3
+    environment:
+      - RAFT_NODE_ID=0                   # auto-detect from hostname suffix (raft-1, raft-2, raft-3)
+      - RAFT_GRPC_PORT=9001
+      - RAFT_DISCOVERY_DNS=raft          # resolves to all container IPs in the "raft" service
+      - RAFT_DATA_DIR=/data/raft         # RiptideKV persistence directory
+      - SERVER_PORT=8080
+    volumes:
+      - raft-data:/data/raft             # persist WAL + SSTables across restarts
+    expose:
+      - "9001"
+      - "8080"
+    networks:
+      - raft-net
+
+volumes:
+  raft-data:
+
+networks:
+  raft-net:
+    driver: bridge

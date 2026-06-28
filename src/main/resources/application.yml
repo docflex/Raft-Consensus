@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: raft-consensus
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+
+raft:
+  node-id: ${RAFT_NODE_ID:0}          # 0 = auto-detect from hostname suffix
+  grpc-port: ${RAFT_GRPC_PORT:9001}
+  discovery-dns: ${RAFT_DISCOVERY_DNS:}  # Docker service name for auto-discovery
+  data-dir: ${RAFT_DATA_DIR:}            # RiptideKV persistence dir (empty = in-memory only)
+  peers: []                              # static peers (ignored when discovery-dns is set)
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    learning: INFO
