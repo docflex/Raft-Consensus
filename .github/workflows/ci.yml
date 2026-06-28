@@ -27,19 +27,19 @@ jobs:
           cache: 'maven'
           server-id: github
           server-username: GITHUB_ACTOR
-          server-password: GH_PKG_TOKEN
+          server-password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Compile
         run: mvn compile -q
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GH_PKG_TOKEN: ${{ secrets.GH_PKG_TOKEN }}
+          GH_PKG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run tests
         run: mvn test -B
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GH_PKG_TOKEN: ${{ secrets.GH_PKG_TOKEN }}
+          GH_PKG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload test results
         if: always()
@@ -66,13 +66,13 @@ jobs:
           cache: 'maven'
           server-id: github
           server-username: GITHUB_ACTOR
-          server-password: GH_PKG_TOKEN
+          server-password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build JAR (skip tests)
         run: mvn package -DskipTests -q
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GH_PKG_TOKEN: ${{ secrets.GH_PKG_TOKEN }}
+          GH_PKG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload JAR
         uses: actions/upload-artifact@v4
@@ -98,13 +98,13 @@ jobs:
           cache: 'maven'
           server-id: github
           server-username: GITHUB_ACTOR
-          server-password: GH_PKG_TOKEN
+          server-password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build JAR for Docker
         run: mvn package -DskipTests -q
         env:
           GITHUB_ACTOR: ${{ github.actor }}
-          GH_PKG_TOKEN: ${{ secrets.GH_PKG_TOKEN }}
+          GH_PKG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image
         run: docker build -t raft-consensus:${{ github.sha }} .
